@@ -1,6 +1,6 @@
 # Celery CSS / LESS Styleguide
 
-*A mostly reasonable approach to CSS and LESS*
+*A mostly reasonable approach to CSS and LESS, modified from Airbnb*
 
 ## Table of Contents
 
@@ -19,8 +19,6 @@
   1. [LESS](#less)
     - [Syntax](#syntax)
     - [Ordering](#ordering-of-property-declarations)
-    - [Mixins](#mixins)
-    - [Placeholders](#placeholders)
     - [Nested Selectors](#nested-selectors)
 
 ## Terminology
@@ -89,17 +87,6 @@ other-stuff
   stuff.less
 ```
 
-### Formatting
-
-* Use soft tabs (2 spaces) for indentation
-* Prefer dashes over camelCasing in class names. Use Capitalized names for components. (see [SUIT](#suit) below).
-* Do not use ID selectors
-* When using multiple selectors in a rule declaration, give each selector its own line.
-* Put a space before the opening brace `{` in rule declarations
-* In properties, put a space after, but not before, the `:` character.
-* Put closing braces `}` of rule declarations on a new line
-* Put blank lines between rule declarations
-
 ## CSS
 
 ### Formatting
@@ -152,36 +139,29 @@ other-stuff
 
 ### SUIT
 
-SUIT is heavily influenced by OOCS and BEM. We encourage SUIT for these reasons:
+[SUIT](https://suitcss.github.io/) is heavily influenced by OOCS and BEM. We encourage SUIT for these reasons:
 
   * It helps create clear, strict relationships between CSS and HTML
   * It helps us create reusable, composable components
   * It allows for less nesting and lower specificity
   * It helps in building scalable stylesheets
 
-**OOCSS**, or “Object Oriented CSS”, is an approach for writing CSS that encourages you to think about your stylesheets as a collection of “objects”: reusuable, repeatable snippets that can be used independently throughout a website.
+> SUIT CSS is a reliable and testable styling methodology for component-based UI development. A collection of CSS packages and build tools are available as modules. SUIT CSS plays well with React, Ember, Angular, and other component-based approaches to UI development.
 
-  * Nicole Sullivan's [OOCSS wiki](https://github.com/stubbornella/oocss/wiki)
-  * Smashing Magazine's [Introduction to OOCSS](http://www.smashingmagazine.com/2011/12/12/an-introduction-to-object-oriented-css-oocss/)
-
-**OOCSS**, or “Object Oriented CSS”, is an approach for writing CSS that encourages you to think about your stylesheets as a collection of “objects”: reusuable, repeatable snippets that can be used independently throughout a website.
-
-  * Nicole Sullivan's [OOCSS wiki](https://github.com/stubbornella/oocss/wiki)
-  * Smashing Magazine's [Introduction to OOCSS](http://www.smashingmagazine.com/2011/12/12/an-introduction-to-object-oriented-css-oocss/)
-
-**BEM**, or “Block-Element-Modifier”, is a _naming convention_ for classes in HTML and CSS. It was originally developed by Yandex with large codebases and scalability in mind, and can serve as a solid set of guidelines for implementing OOCSS.
-
-  * CSS Trick's [BEM 101](https://css-tricks.com/bem-101/)
-  * Harry Roberts' [introduction to BEM](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/)
+  * [SUIT Documentation](https://github.com/suitcss/suit/blob/master/doc/README.md)
 
 **Example**
 
 ```html
-<article class="listing-card listing-card--featured">
+<article class="ProductCard ProductCard--featured">
 
-  <h1 class="listing-card__title">Adorable 2BR in the sunny Mission</h1>
+  <h1 class="ProductCard-title">Electronic Doormat</h1>
 
-  <div class="listing-card__content">
+  <div class="ProductCard-content">
+    <p>Vestibulum id ligula porta felis euismod semper.</p>
+  </div>
+
+  <div class="ProductCard-superImportantContent">
     <p>Vestibulum id ligula porta felis euismod semper.</p>
   </div>
 
@@ -189,15 +169,16 @@ SUIT is heavily influenced by OOCS and BEM. We encourage SUIT for these reasons:
 ```
 
 ```css
-.listing-card { }
-.listing-card--featured { }
-.listing-card__title { }
-.listing-card__content { }
+.ProductCard { }
+.ProductCard--featured { }
+.ProductCard-title { }
+.ProductCard-content { }
+.ProductCard-superImportantContent { }
 ```
 
-  * `.listing-card` is the “block” and represents the higher-level component
-  * `.listing-card__title` is an “element” and represents a descendant of `.listing-card` that helps compose the block as a whole.
-  * `.listing-card--featured` is a “modifier” and represents a different state or variation on the `.listing-card` block.
+  * `.ProductCard` is the “block” and represents the higher-level component
+  * `.ProductCard-title` is an “element” and represents a descendant of `.ProductCard` that helps compose the block as a whole.
+  * `.ProductCard--featured` is a “modifier” and represents a different state or variation on the `.ListingCard` block.
 
 ### ID selectors
 
@@ -219,117 +200,77 @@ We recommend creating JavaScript-specific classes to bind to, prefixed with `.js
 
 ### Syntax
 
-* Use the `.scss` syntax, never the original `.sass` syntax
-* Order your `@extend`, regular CSS and `@include` declarations logically (see below)
+* Order your `extend` and regular CSS declarations logically (see below)
+* Variable names should use kebab case, like file names.
+* Variable names should generally follow `componentname-elementname-variant-state-property` order. Only `property` is required.
+* `@*-color` refers to text color by default. If by itself, it should be called `@text-color`.
+
+With a component `MetricPanel`:
+
+**Bad**
+
+```less
+@metricpanel-color: @blue-dark;
+
+@MetricPanel-header-color: @gray;
+@metric-panel-header-hover-color: @blue;
+```
+
+**Good**
+
+```less
+@metric-panel-color: @blue-dark;
+
+@metric-panel-header-color: @gray;
+@metric-panel-header-color-hover: @blue;
+```
 
 ### Ordering of property declarations
 
-1. `@extend` declarations
+1. `extend` declarations
 
     Just as in other OOP languages, it's helpful to know right away that this “class” inherits from another.
 
-    ```scss
-    .btn-green {
-      @extend %btn;
+    ```less
+    .MetricPanel {
+      &:extend(.Panel);
       // ...
     }
     ```
 
-2. Property declarations
+1. Property declarations
 
-    Now list all standard property declarations, anything that isn't an `@extend`, `@include`, or a nested selector.
+    Now list all standard property declarations, anything that isn't an `extend`, `@include`, or a nested selector.
 
-    ```scss
-    .btn-green {
-      @extend %btn;
+    ```less
+    .MetricPanel {
+      &:extend(.Panel);
       background: green;
       font-weight: bold;
       // ...
     }
     ```
 
-3. `@include` declarations
-
-    Grouping `@include`s at the end makes it easier to read the entire selector, and it also visually separates them from `@extend`s.
-
-    ```scss
-    .btn-green {
-      @extend %btn;
-      background: green;
-      font-weight: bold;
-      @include transition(background 0.5s ease);
-      // ...
-    }
-    ```
-
-4. Nested selectors
+1. Nested selectors
 
     Nested selectors, _if necessary_, go last, and nothing goes after them. Add whitespace between your rule declarations and nested selectors, as well as between adjacent nested selectors. Apply the same guidelines as above to your nested selectors.
 
-    ```scss
-    .btn {
-      @extend %btn;
+    ```less
+    .MetricPanel {
+      &:extend(.Panel);
       background: green;
       font-weight: bold;
-      @include transition(background 0.5s ease);
 
       .icon {
         margin-right: 10px;
       }
     }
     ```
-
-### Mixins
-
-Mixins, defined via `@mixin` and called with `@include`, should be used sparingly and only when function arguments are necessary. A mixin without function arguments (i.e. `@mixin hide { display: none; }`) is better accomplished using a placeholder selector (see below) in order to prevent code duplication.
-
-### Placeholders
-
-Placeholders in LESS, defined via `%selector` and used with `@extend`, are a way of defining rule declarations that aren't automatically output in your compiled stylesheet. Instead, other selectors “inherit” from the placeholder, and the relevant selectors are copied to the point in the stylesheet where the placeholder is defined. This is best illustrated with the example below.
-
-Placeholders are powerful but easy to abuse, especially when combined with nested selectors. **As a rule of thumb, avoid creating placeholders with nested rule declarations, or calling `@extend` inside nested selectors.** Placeholders are great for simple inheritance, but can easily result in the accidental creation of additional selectors without paying close attention to how and where they are used.
-
-**LESS**
-
-```sass
-// Unless we call `@extend %icon` these properties won't be compiled!
-%icon {
-  font-family: "Open Sans";
-}
-
-.icon-error {
-  @extend %icon;
-  color: red;
-}
-
-.icon-success {
-  @extend %icon;
-  color: green;
-}
-```
-
-**CSS**
-
-```css
-.icon-error,
-.icon-success {
-  font-family: "Open Sans";
-}
-
-.icon-error {
-  color: red;
-}
-
-.icon-success {
-  color: green;
-}
-```
-
 ### Nested selectors
 
 **Do not nest selectors more than three levels deep!**
 
-```scss
+```less
 .page-container {
   .content {
     .profile {
