@@ -153,7 +153,7 @@ other-stuff
 **Example**
 
 ```html
-<article class="ProductCard ProductCard--featured">
+<article class="ProductCard ProductCard--featured is-expanded">
 
   <h1 class="ProductCard-title">Electronic Doormat</h1>
 
@@ -170,6 +170,7 @@ other-stuff
 
 ```css
 .ProductCard { }
+.ProductCard.is-expanded { }
 .ProductCard--featured { }
 .ProductCard-title { }
 .ProductCard-content { }
@@ -177,6 +178,7 @@ other-stuff
 ```
 
   * `.ProductCard` is the “block” and represents the higher-level component
+  * `.ProductCard.is-expanded` is a representation of the state of the component.
   * `.ProductCard-title` is an “element” and represents a descendant of `.ProductCard` that helps compose the block as a whole.
   * `.ProductCard--featured` is a “modifier” and represents a different state or variation on the `.ListingCard` block.
 
