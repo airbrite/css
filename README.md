@@ -215,7 +215,7 @@ With a component `MetricPanel`:
 @metricpanel-color: @blue-dark;
 
 @MetricPanel-header-color: @gray;
-@metric-panel-header-hover-color: @blue;
+@metric-panel-header-color-hover: @blue;
 ```
 
 **Good**
@@ -224,7 +224,7 @@ With a component `MetricPanel`:
 @metric-panel-color: @blue-dark;
 
 @metric-panel-header-color: @gray;
-@metric-panel-header-color-hover: @blue;
+@metric-panel-header-hover-color: @blue;
 ```
 
 ### Ordering of property declarations
